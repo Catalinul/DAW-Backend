@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="RestaurantDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="ClientID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nume" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ComandaItemes">
+          <Key>
+            <PropertyRef Name="ComandaItemID" />
+          </Key>
+          <Property Name="ComandaItemID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ComandaID" Type="bigint" />
+          <Property Name="ItemID" Type="int" />
+          <Property Name="Cantitate" Type="int" />
+        </EntityType>
+        <EntityType Name="Comandas">
+          <Key>
+            <PropertyRef Name="ComandaID" />
+          </Key>
+          <Property Name="ComandaID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ComandaNr" Type="varchar" MaxLength="50" />
+          <Property Name="ClientID" Type="int" />
+          <Property Name="MetPlata" Type="varchar" MaxLength="50" />
+          <Property Name="Total" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Items">
+          <Key>
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="ItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nume" Type="varchar" MaxLength="50" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <Association Name="FK_Comanda_Client">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="0..1" />
+          <End Role="Comandas" Type="Self.Comandas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="ClientID" />
+            </Principal>
+            <Dependent Role="Comandas">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ComandaIteme_Comanda">
+          <End Role="Comandas" Type="Self.Comandas" Multiplicity="0..1" />
+          <End Role="ComandaItemes" Type="Self.ComandaItemes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comandas">
+              <PropertyRef Name="ComandaID" />
+            </Principal>
+            <Dependent Role="ComandaItemes">
+              <PropertyRef Name="ComandaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ComandaIteme_Item">
+          <End Role="Items" Type="Self.Items" Multiplicity="0..1" />
+          <End Role="ComandaItemes" Type="Self.ComandaItemes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="ItemID" />
+            </Principal>
+            <Dependent Role="ComandaItemes">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RestaurantDBModelStoreContainer">
+          <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ComandaItemes" EntityType="Self.ComandaItemes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comandas" EntityType="Self.Comandas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Comanda_Client" Association="Self.FK_Comanda_Client">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="Comandas" EntitySet="Comandas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ComandaIteme_Comanda" Association="Self.FK_ComandaIteme_Comanda">
+            <End Role="Comandas" EntitySet="Comandas" />
+            <End Role="ComandaItemes" EntitySet="ComandaItemes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ComandaIteme_Item" Association="Self.FK_ComandaIteme_Item">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="ComandaItemes" EntitySet="ComandaItemes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RestaurantDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="ClientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nume" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Comandas" Relationship="Self.FK_Comanda_Client" FromRole="Clients" ToRole="Comandas" />
+        </EntityType>
+        <EntityType Name="ComandaIteme">
+          <Key>
+            <PropertyRef Name="ComandaItemID" />
+          </Key>
+          <Property Name="ComandaItemID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ComandaID" Type="Int64" />
+          <Property Name="ItemID" Type="Int32" />
+          <Property Name="Cantitate" Type="Int32" />
+          <NavigationProperty Name="Comanda" Relationship="Self.FK_ComandaIteme_Comanda" FromRole="ComandaItemes" ToRole="Comandas" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_ComandaIteme_Item" FromRole="ComandaItemes" ToRole="Items" />
+        </EntityType>
+        <EntityType Name="Comanda">
+          <Key>
+            <PropertyRef Name="ComandaID" />
+          </Key>
+          <Property Name="ComandaID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ComandaNr" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClientID" Type="Int32" />
+          <Property Name="MetPlata" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Comanda_Client" FromRole="Comandas" ToRole="Clients" />
+          <NavigationProperty Name="ComandaItemes" Relationship="Self.FK_ComandaIteme_Comanda" FromRole="Comandas" ToRole="ComandaItemes" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="ItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nume" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="ComandaItemes" Relationship="Self.FK_ComandaIteme_Item" FromRole="Items" ToRole="ComandaItemes" />
+        </EntityType>
+        <Association Name="FK_Comanda_Client">
+          <End Role="Clients" Type="Self.Client" Multiplicity="0..1" />
+          <End Role="Comandas" Type="Self.Comanda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="ClientID" />
+            </Principal>
+            <Dependent Role="Comandas">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ComandaIteme_Comanda">
+          <End Role="Comandas" Type="Self.Comanda" Multiplicity="0..1" />
+          <End Role="ComandaItemes" Type="Self.ComandaIteme" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comandas">
+              <PropertyRef Name="ComandaID" />
+            </Principal>
+            <Dependent Role="ComandaItemes">
+              <PropertyRef Name="ComandaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ComandaIteme_Item">
+          <End Role="Items" Type="Self.Item" Multiplicity="0..1" />
+          <End Role="ComandaItemes" Type="Self.ComandaIteme" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="ItemID" />
+            </Principal>
+            <Dependent Role="ComandaItemes">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBModel" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clients" EntityType="Self.Client" />
+          <EntitySet Name="ComandaItemes" EntityType="Self.ComandaIteme" />
+          <EntitySet Name="Comandas" EntityType="Self.Comanda" />
+          <EntitySet Name="Items" EntityType="Self.Item" />
+          <AssociationSet Name="FK_Comanda_Client" Association="Self.FK_Comanda_Client">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="Comandas" EntitySet="Comandas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ComandaIteme_Comanda" Association="Self.FK_ComandaIteme_Comanda">
+            <End Role="Comandas" EntitySet="Comandas" />
+            <End Role="ComandaItemes" EntitySet="ComandaItemes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ComandaIteme_Item" Association="Self.FK_ComandaIteme_Item">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="ComandaItemes" EntitySet="ComandaItemes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RestaurantDBModelStoreContainer" CdmEntityContainer="DBModel">
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="RestaurantDBModel.Client">
+              <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="Nume" ColumnName="Nume" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ComandaItemes">
+            <EntityTypeMapping TypeName="RestaurantDBModel.ComandaIteme">
+              <MappingFragment StoreEntitySet="ComandaItemes">
+                <ScalarProperty Name="ComandaItemID" ColumnName="ComandaItemID" />
+                <ScalarProperty Name="ComandaID" ColumnName="ComandaID" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="Cantitate" ColumnName="Cantitate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comandas">
+            <EntityTypeMapping TypeName="RestaurantDBModel.Comanda">
+              <MappingFragment StoreEntitySet="Comandas">
+                <ScalarProperty Name="ComandaID" ColumnName="ComandaID" />
+                <ScalarProperty Name="ComandaNr" ColumnName="ComandaNr" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="MetPlata" ColumnName="MetPlata" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="RestaurantDBModel.Item">
+              <MappingFragment StoreEntitySet="Items">
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="Nume" ColumnName="Nume" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

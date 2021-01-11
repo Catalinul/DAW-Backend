@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="RestaurantDBModelStoreContainer" CdmEntityContainer="DBModel">
+    <EntitySetMapping Name="Clients">
+      <EntityTypeMapping TypeName="RestaurantDBModel.Client">
+        <MappingFragment StoreEntitySet="Clients">
+          <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+          <ScalarProperty Name="Nume" ColumnName="Nume" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ComandaItemes">
+      <EntityTypeMapping TypeName="RestaurantDBModel.ComandaIteme">
+        <MappingFragment StoreEntitySet="ComandaItemes">
+          <ScalarProperty Name="ComandaItemID" ColumnName="ComandaItemID" />
+          <ScalarProperty Name="ComandaID" ColumnName="ComandaID" />
+          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+          <ScalarProperty Name="Cantitate" ColumnName="Cantitate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Comandas">
+      <EntityTypeMapping TypeName="RestaurantDBModel.Comanda">
+        <MappingFragment StoreEntitySet="Comandas">
+          <ScalarProperty Name="ComandaID" ColumnName="ComandaID" />
+          <ScalarProperty Name="ComandaNr" ColumnName="ComandaNr" />
+          <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+          <ScalarProperty Name="MetPlata" ColumnName="MetPlata" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Items">
+      <EntityTypeMapping TypeName="RestaurantDBModel.Item">
+        <MappingFragment StoreEntitySet="Items">
+          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+          <ScalarProperty Name="Nume" ColumnName="Nume" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
