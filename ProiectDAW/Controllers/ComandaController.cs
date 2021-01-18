@@ -17,22 +17,60 @@ namespace ProiectDAW.Controllers
         private DBModel db = new DBModel();
 
         // GET: api/Comanda
-        public IQueryable<Comanda> GetComandas()
+        public System.Object GetComandas()
         {
-            return db.Comandas;
+			//facem join intre tabela Comanda si tabela Client dupa ClientID
+			//expresie LINQ
+			var result = (from a in db.Comandas
+						  join b in db.Clients on a.ClientID equals b.ClientID
+
+						  select new
+						  {
+							  a.ComandaID,
+							  a.ComandaNr,
+							  Client = b.Nume,
+							  a.MetPlata,
+							  a.Total
+						  }).ToList();
+
+
+            return result;
         }
 
         // GET: api/Comanda/5
         [ResponseType(typeof(Comanda))]
         public IHttpActionResult GetComanda(long id)
         {
-            Comanda comanda = db.Comandas.Find(id);
-            if (comanda == null)
-            {
-                return NotFound();
-            }
+			var comanda = (from a in db.Comandas
+						   where a.ComandaID == id
 
-            return Ok(comanda);
+						   select new
+						   {
+							   a.ComandaID,
+							   a.ComandaNr,
+							   a.ClientID,
+							   a.MetPlata,
+							   a.Total
+						   }).FirstOrDefault();
+
+			//facem join intre ComandaIteme si Iteme pentru a putea obtine valorile vectorului comandaIteme din comanda.service
+
+			var comandaDetalii = (from a in db.ComandaItemes
+								  join b in db.Items on a.ItemID equals b.ItemID
+								  where a.ComandaID == id
+
+								  select new
+								  {
+									  a.ComandaID,
+									  a.ComandaItemID,
+									  a.ItemID,
+									  ItemNume = b.Nume,
+									  b.Price,
+									  a.Cantitate,
+									  Total = a.Cantitate * b.Price
+								  }).ToList();
+
+			return Ok(new { comanda, comandaDetalii });
         }
 
         // PUT: api/Comanda/5
@@ -70,23 +108,49 @@ namespace ProiectDAW.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Comanda
-        [ResponseType(typeof(Comanda))]
-        public IHttpActionResult PostComanda(Comanda comanda)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+		// POST: api/Comanda
+		[ResponseType(typeof(Comanda))]
+		public IHttpActionResult PostComanda(Comanda comanda)
+		{
+			try
+			{
+				//insert pentru tabela Comanda
+				db.Comandas.Add(comanda);
 
-            db.Comandas.Add(comanda);
-            db.SaveChanges();
+				//insert pentru tabela ComendaIteme
+				foreach (var item in comanda.ComandaItemes) //iteram prin colectia din Coamnda.cs
+				{
+					db.ComandaItemes.Add(item);
+				}
 
-            return CreatedAtRoute("DefaultApi", new { id = comanda.ComandaID }, comanda);
-        }
+				db.SaveChanges();
 
-        // DELETE: api/Comanda/5
-        [ResponseType(typeof(Comanda))]
+				//return Ok();
+				return CreatedAtRoute("DefaultApi", new { id = comanda.ComandaID }, comanda);
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+
+		//// POST: api/Comanda
+		//[ResponseType(typeof(Comanda))]
+		//public IHttpActionResult PostComanda(Comanda comanda)
+		//{
+		//	if (!ModelState.IsValid)
+		//	{
+		//		return BadRequest(ModelState);
+		//	}
+
+		//	db.Comandas.Add(comanda);
+		//	db.SaveChanges();
+
+		//	return CreatedAtRoute("DefaultApi", new { id = comanda.ComandaID }, comanda);
+		//}
+
+		// DELETE: api/Comanda/5
+		[ResponseType(typeof(Comanda))]
         public IHttpActionResult DeleteComanda(long id)
         {
             Comanda comanda = db.Comandas.Find(id);

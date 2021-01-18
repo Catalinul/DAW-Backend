@@ -86,3 +86,4 @@ D:\Facultate\DezvAplicatiiWeb\proiect\ProiectDAW\ProiectDAW\obj\Debug\ProiectDAW
 D:\Facultate\DezvAplicatiiWeb\proiect\ProiectDAW\ProiectDAW\bin\System.Web.Cors.dll
 D:\Facultate\DezvAplicatiiWeb\proiect\ProiectDAW\ProiectDAW\bin\System.Web.Http.Cors.dll
 D:\Facultate\DezvAplicatiiWeb\proiect\ProiectDAW\ProiectDAW\bin\System.Web.Http.Cors.xml
+D:\Facultate\DezvAplicatiiWeb\proiect\ProiectDAW\ProiectDAW\obj\Debug\ProiectDAW.csprojAssemblyReference.cache
