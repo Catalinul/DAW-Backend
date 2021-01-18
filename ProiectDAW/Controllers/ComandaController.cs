@@ -50,7 +50,8 @@ namespace ProiectDAW.Controllers
 							   a.ComandaNr,
 							   a.ClientID,
 							   a.MetPlata,
-							   a.Total
+							   a.Total,
+							   ItemeComenziSterseID = ""
 						   }).FirstOrDefault();
 
 			//facem join intre ComandaIteme si Iteme pentru a putea obtine valorile vectorului comandaIteme din comanda.service
@@ -73,60 +74,43 @@ namespace ProiectDAW.Controllers
 			return Ok(new { comanda, comandaDetalii });
         }
 
-        // PUT: api/Comanda/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutComanda(long id, Comanda comanda)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != comanda.ComandaID)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(comanda).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ComandaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
 		// POST: api/Comanda
 		[ResponseType(typeof(Comanda))]
 		public IHttpActionResult PostComanda(Comanda comanda)
 		{
 			try
 			{
-				//insert pentru tabela Comanda
-				db.Comandas.Add(comanda);
-
 				//insert pentru tabela ComendaIteme
 				foreach (var item in comanda.ComandaItemes) //iteram prin colectia din Coamnda.cs
 				{
-					db.ComandaItemes.Add(item);
+					if (item.ComandaItemID == 0) //insert
+						db.ComandaItemes.Add(item);
+					else
+						db.Entry(item).State = EntityState.Modified; ;
+				}
+
+
+
+				//insert pentru tabela Comanda
+				if (comanda.ComandaID == 0) //realizam operatia de insert
+					db.Comandas.Add(comanda);
+				else //altfel realizam update
+					db.Entry(comanda).State = EntityState.Modified; 
+
+
+				//operatia Delete pentru ComandaIteme 
+				// in comanda.service am trimis prin FormData un string care contine lista cu itemele sterse din comanda
+
+				foreach (var id in comanda.ItemeComenziSterseID.Split(',').Where(x => x != "")) //where a fost adaugat ca sa nu avem un item gol la sfarsitul listei
+				{
+					ComandaIteme x = db.ComandaItemes.Find(Convert.ToInt64(id));
+					db.ComandaItemes.Remove(x);
 				}
 
 				db.SaveChanges();
 
-				//return Ok();
-				return CreatedAtRoute("DefaultApi", new { id = comanda.ComandaID }, comanda);
+				return Ok();
+				//return CreatedAtRoute("DefaultApi", new { id = comanda.ComandaID }, comanda);
 			}
 			catch (Exception ex)
 			{
@@ -134,30 +118,17 @@ namespace ProiectDAW.Controllers
 			}
 		}
 
-		//// POST: api/Comanda
-		//[ResponseType(typeof(Comanda))]
-		//public IHttpActionResult PostComanda(Comanda comanda)
-		//{
-		//	if (!ModelState.IsValid)
-		//	{
-		//		return BadRequest(ModelState);
-		//	}
-
-		//	db.Comandas.Add(comanda);
-		//	db.SaveChanges();
-
-		//	return CreatedAtRoute("DefaultApi", new { id = comanda.ComandaID }, comanda);
-		//}
-
 		// DELETE: api/Comanda/5
 		[ResponseType(typeof(Comanda))]
         public IHttpActionResult DeleteComanda(long id)
         {
-            Comanda comanda = db.Comandas.Find(id);
-            if (comanda == null)
-            {
-                return NotFound();
-            }
+			Comanda comanda = db.Comandas.Include(y => y.ComandaItemes)
+				.SingleOrDefault(x => x.ComandaID == id);
+
+			foreach (var item in comanda.ComandaItemes.ToList())
+			{
+				db.ComandaItemes.Remove(item);
+			}
 
             db.Comandas.Remove(comanda);
             db.SaveChanges();

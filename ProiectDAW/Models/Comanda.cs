@@ -11,22 +11,28 @@ namespace ProiectDAW.Models
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class Comanda
-    {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Comanda()
-        {
-            this.ComandaItemes = new HashSet<ComandaIteme>();
-        }
-    
-        public long ComandaID { get; set; }
-        public string ComandaNr { get; set; }
-        public Nullable<int> ClientID { get; set; }
-        public string MetPlata { get; set; }
-        public Nullable<decimal> Total { get; set; }
-    
-        public virtual Client Client { get; set; }
+	using System.ComponentModel.DataAnnotations.Schema;
+
+	public partial class Comanda
+	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+		public Comanda()
+		{
+			this.ComandaItemes = new HashSet<ComandaIteme>();
+		}
+
+		public long ComandaID { get; set; }
+		public string ComandaNr { get; set; }
+		public Nullable<int> ClientID { get; set; }
+		public string MetPlata { get; set; }
+		public Nullable<decimal> Total { get; set; }
+
+		[NotMapped] //atribut adaugat pentru a evita mismatch-ul intre EF si SQL Server (nu exista coloana ItemeComenziSterseID in tabela Comanda)  
+
+		public string ItemeComenziSterseID { get; set; }
+
+
+		public virtual Client Client { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ComandaIteme> ComandaItemes { get; set; }
     }
