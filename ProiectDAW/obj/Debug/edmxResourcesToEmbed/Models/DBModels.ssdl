@@ -26,6 +26,15 @@
     <Property Name="MetPlata" Type="varchar" MaxLength="50" />
     <Property Name="Total" Type="decimal" Precision="18" Scale="2" />
   </EntityType>
+  <EntityType Name="DetaliiItem">
+    <Key>
+      <PropertyRef Name="ItemID" />
+    </Key>
+    <Property Name="ItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CodBare" Type="varchar" MaxLength="50" />
+    <Property Name="Producator" Type="varchar" MaxLength="50" />
+    <Property Name="DataExp" Type="date" />
+  </EntityType>
   <EntityType Name="Items">
     <Key>
       <PropertyRef Name="ItemID" />
@@ -70,10 +79,23 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_DetaliiItem_Items">
+    <End Role="Items" Type="Self.Items" Multiplicity="1" />
+    <End Role="DetaliiItem" Type="Self.DetaliiItem" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Items">
+        <PropertyRef Name="ItemID" />
+      </Principal>
+      <Dependent Role="DetaliiItem">
+        <PropertyRef Name="ItemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="RestaurantDBModelStoreContainer">
     <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ComandaItemes" EntityType="Self.ComandaItemes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Comandas" EntityType="Self.Comandas" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DetaliiItem" EntityType="Self.DetaliiItem" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Comanda_Client" Association="Self.FK_Comanda_Client">
       <End Role="Clients" EntitySet="Clients" />
@@ -86,6 +108,10 @@
     <AssociationSet Name="FK_ComandaIteme_Item" Association="Self.FK_ComandaIteme_Item">
       <End Role="Items" EntitySet="Items" />
       <End Role="ComandaItemes" EntitySet="ComandaItemes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DetaliiItem_Items" Association="Self.FK_DetaliiItem_Items">
+      <End Role="Items" EntitySet="Items" />
+      <End Role="DetaliiItem" EntitySet="DetaliiItem" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

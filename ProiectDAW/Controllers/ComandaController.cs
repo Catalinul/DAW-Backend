@@ -12,13 +12,13 @@ using ProiectDAW.Models;
 
 namespace ProiectDAW.Controllers
 {
-    public class ComandaController : ApiController
-    {
-        private DBModel db = new DBModel();
+	public class ComandaController : ApiController
+	{
+		private DBModel db = new DBModel();
 
-        // GET: api/Comanda
-        public System.Object GetComandas()
-        {
+		// GET: api/Comanda
+		public System.Object GetComandas()
+		{
 			//facem join intre tabela Comanda si tabela Client dupa ClientID
 			//expresie LINQ
 			var result = (from a in db.Comandas
@@ -34,13 +34,13 @@ namespace ProiectDAW.Controllers
 						  }).ToList();
 
 
-            return result;
-        }
+			return result;
+		}
 
-        // GET: api/Comanda/5
-        [ResponseType(typeof(Comanda))]
-        public IHttpActionResult GetComanda(long id)
-        {
+		// GET: api/Comanda/5
+		[ResponseType(typeof(Comanda))]
+		public IHttpActionResult GetComanda(long id)
+		{
 			var comanda = (from a in db.Comandas
 						   where a.ComandaID == id
 
@@ -72,7 +72,7 @@ namespace ProiectDAW.Controllers
 								  }).ToList();
 
 			return Ok(new { comanda, comandaDetalii });
-        }
+		}
 
 		// POST: api/Comanda
 		[ResponseType(typeof(Comanda))]
@@ -95,7 +95,7 @@ namespace ProiectDAW.Controllers
 				if (comanda.ComandaID == 0) //realizam operatia de insert
 					db.Comandas.Add(comanda);
 				else //altfel realizam update
-					db.Entry(comanda).State = EntityState.Modified; 
+					db.Entry(comanda).State = EntityState.Modified;
 
 
 				//operatia Delete pentru ComandaIteme 
@@ -120,8 +120,8 @@ namespace ProiectDAW.Controllers
 
 		// DELETE: api/Comanda/5
 		[ResponseType(typeof(Comanda))]
-        public IHttpActionResult DeleteComanda(long id)
-        {
+		public IHttpActionResult DeleteComanda(long id)
+		{
 			Comanda comanda = db.Comandas.Include(y => y.ComandaItemes)
 				.SingleOrDefault(x => x.ComandaID == id);
 
@@ -130,24 +130,24 @@ namespace ProiectDAW.Controllers
 				db.ComandaItemes.Remove(item);
 			}
 
-            db.Comandas.Remove(comanda);
-            db.SaveChanges();
+			db.Comandas.Remove(comanda);
+			db.SaveChanges();
 
-            return Ok(comanda);
-        }
+			return Ok(comanda);
+		}
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				db.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        private bool ComandaExists(long id)
-        {
-            return db.Comandas.Count(e => e.ComandaID == id) > 0;
-        }
-    }
+		private bool ComandaExists(long id)
+		{
+			return db.Comandas.Count(e => e.ComandaID == id) > 0;
+		}
+	}
 }

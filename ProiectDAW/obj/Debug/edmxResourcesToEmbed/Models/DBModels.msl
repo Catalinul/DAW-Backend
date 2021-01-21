@@ -39,5 +39,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="DetaliiItems">
+      <EntityTypeMapping TypeName="RestaurantDBModel.DetaliiItem">
+        <MappingFragment StoreEntitySet="DetaliiItem">
+          <ScalarProperty Name="DataExp" ColumnName="DataExp" />
+          <ScalarProperty Name="Producator" ColumnName="Producator" />
+          <ScalarProperty Name="CodBare" ColumnName="CodBare" />
+          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

@@ -170,6 +170,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\ComandaController.cs" />
+    <Compile Include="Controllers\DetaliiItemController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -199,6 +200,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DBModels.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DetaliiItem.cs">
+      <DependentUpon>DBModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Item.cs">
       <DependentUpon>DBModels.tt</DependentUpon>

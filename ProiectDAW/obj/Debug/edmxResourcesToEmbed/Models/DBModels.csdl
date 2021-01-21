@@ -39,6 +39,7 @@
     <Property Name="Nume" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
     <NavigationProperty Name="ComandaItemes" Relationship="Self.FK_ComandaIteme_Item" FromRole="Items" ToRole="ComandaItemes" />
+    <NavigationProperty Name="DetaliiItem" Relationship="RestaurantDBModel.FK_DetaliiItem_Items" FromRole="Item" ToRole="DetaliiItem" />
   </EntityType>
   <Association Name="FK_Comanda_Client">
     <End Role="Clients" Type="Self.Client" Multiplicity="0..1" />
@@ -93,5 +94,32 @@
       <End Role="Items" EntitySet="Items" />
       <End Role="ComandaItemes" EntitySet="ComandaItemes" />
     </AssociationSet>
+    <EntitySet Name="DetaliiItems" EntityType="RestaurantDBModel.DetaliiItem" />
+    <AssociationSet Name="FK_DetaliiItem_Items" Association="RestaurantDBModel.FK_DetaliiItem_Items">
+      <End Role="Item" EntitySet="Items" />
+      <End Role="DetaliiItem" EntitySet="DetaliiItems" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="DetaliiItem">
+    <Key>
+      <PropertyRef Name="ItemID" />
+    </Key>
+    <Property Name="ItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CodBare" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Producator" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DataExp" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Item" Relationship="RestaurantDBModel.FK_DetaliiItem_Items" FromRole="DetaliiItem" ToRole="Item" />
+  </EntityType>
+  <Association Name="FK_DetaliiItem_Items">
+    <End Type="RestaurantDBModel.Item" Role="Item" Multiplicity="1" />
+    <End Type="RestaurantDBModel.DetaliiItem" Role="DetaliiItem" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Item">
+        <PropertyRef Name="ItemID" />
+      </Principal>
+      <Dependent Role="DetaliiItem">
+        <PropertyRef Name="ItemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

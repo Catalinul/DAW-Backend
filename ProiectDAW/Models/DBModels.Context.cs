@@ -29,5 +29,6 @@ namespace ProiectDAW.Models
         public virtual DbSet<ComandaIteme> ComandaItemes { get; set; }
         public virtual DbSet<Comanda> Comandas { get; set; }
         public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<DetaliiItem> DetaliiItems { get; set; }
     }
 }

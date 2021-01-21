@@ -5,13 +5,15 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="804082236f54459ab6f2d0c4177acc0f" Name="Diagram1">
-        <EntityTypeShape EntityType="RestaurantDBModel.Client" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantDBModel.Client" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="RestaurantDBModel.ComandaIteme" Width="1.5" PointX="5.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="RestaurantDBModel.Comanda" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantDBModel.Item" Width="1.5" PointX="3.625" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantDBModel.Item" Width="1.5" PointX="6" PointY="4" IsExpanded="true" />
         <AssociationConnector Association="RestaurantDBModel.FK_Comanda_Client" ManuallyRouted="false" />
         <AssociationConnector Association="RestaurantDBModel.FK_ComandaIteme_Comanda" ManuallyRouted="false" />
         <AssociationConnector Association="RestaurantDBModel.FK_ComandaIteme_Item" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="RestaurantDBModel.DetaliiItem" Width="1.5" PointX="8.25" PointY="4" />
+        <AssociationConnector Association="RestaurantDBModel.FK_DetaliiItem_Items" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

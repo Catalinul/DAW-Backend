@@ -26,5 +26,6 @@ namespace ProiectDAW.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ComandaIteme> ComandaItemes { get; set; }
+        public virtual DetaliiItem DetaliiItem { get; set; }
     }
 }
